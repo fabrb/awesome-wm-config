@@ -616,6 +616,15 @@ globalkeys =
 				awful.util.spawn("krita --nosplash --canvasonly")
 			end,
 			{ description = "run krita", group = "apps" }
+        ),
+		
+		awful.key(
+			{ modkey },
+			"l",
+			function()
+				awful.util.spawn("bash lock.sh")
+			end,
+			{ description = "lock screen", group = "awesome" }
 		)
 	)
 
@@ -987,3 +996,7 @@ awful.spawn.with_shell("nitrogen --restore")
 
 -- Config monitors
 awful.spawn.with_shell("xrandr --output HDMI-1 --primary  --left-of eDP-1")
+
+-- Visual stuff
+awful.spawn.with_shell("pkill compton; pkill xcompmgr; pkill picom; picom --config ~/.config/picom/picom.conf &")
+
