@@ -160,7 +160,6 @@ mykeyboardlayout = awful.widget.keyboardlayout()
 -- {{{ Wibar
 -- Create a textclock widget
 mytextclock = wibox.widget.textclock()
--- month_calendar:attach( mytextclock, "tr" )
 
 -- Create a wibox for each screen and add it
 local taglist_buttons =
@@ -298,7 +297,25 @@ awful.screen.connect_for_each_screen(
 			awful.widget.taglist {
 				screen = s,
 				filter = awful.widget.taglist.filter.all,
-				buttons = taglist_buttons
+                buttons = taglist_buttons,
+				
+				style   = {
+					shape_border_width = 1,
+					shape_border_color = '#777777',
+					shape              = gears.shape.rounded_bar,
+				},
+				layout  = {
+					spacing        = 2,
+					spacing_widget = {
+						{
+							widget       = wibox.widget.textbox
+						},
+						valign = 'center',
+						halign = 'center',
+						widget = wibox.container.place,
+					},
+					layout         = wibox.layout.flex.horizontal
+				},
 
 			}
 
@@ -307,7 +324,25 @@ awful.screen.connect_for_each_screen(
 			awful.widget.tasklist {
 				screen = s,
 				filter = awful.widget.tasklist.filter.currenttags,
-				buttons = tasklist_buttons
+				buttons = tasklist_buttons,
+
+				style   = {
+					shape_border_width = 1,
+					shape_border_color = '#777777',
+					shape              = gears.shape.rounded_bar,
+				},
+				layout  = {
+					spacing        = 6,
+					spacing_widget = {
+						{
+							widget       = wibox.widget.textbox
+						},
+						valign = 'center',
+						halign = 'center',
+						widget = wibox.container.place,
+					},
+					layout         = wibox.layout.flex.horizontal
+				},
 			}
 
 		-- Create the wibox
@@ -315,15 +350,30 @@ awful.screen.connect_for_each_screen(
 			awful.wibar {
 				position = "top",
 				screen = s,
-				height = 32,
+				height = 38,
 				ontop = true,
 				stretch = false,
                 width = 800,
                 border_width = 2,
 				shape = function (cr, width, height)
-					gears.shape.rounded_rect(cr, width, height, 6)
+					gears.shape.rounded_rect(cr, width, height, 32)
 				end
-			}
+            }
+		
+        s.datecalendar = awful.widget.calendar_popup.month {
+            screen        = awful.mouse.client.screen,
+			margin = 8,
+			long_weekdays = true,
+			spacing = 10,
+            week_numbers = true,
+			start_sunday = true,
+			style_header         = {
+				shape_border_width = 1,
+				shape_border_color = '#777777',
+				shape              = gears.shape.rounded_bar,
+			},
+		}
+		s.datecalendar:attach(mytextclock, "tc")
 
 		-- Add widgets to the wibox
 		s.mywibox:setup {
@@ -343,11 +393,11 @@ awful.screen.connect_for_each_screen(
 					mykeyboardlayout,
 					wibox.widget.systray(),
 					mytextclock
-				}
+				},
 			},
 
-			bottom = 6,
-			top = 6,
+			bottom = 10,
+			top = 10,
 			left = 6,
 			right = 6,
 
@@ -570,7 +620,7 @@ globalkeys =
 		),
 		-- fabrb-keybindings
 		awful.key(
-			{ modkey },
+			{ modkey, "Shift" },
 			"b",
 			function()
 				awful.util.spawn("firefox")
