@@ -675,6 +675,15 @@ globalkeys =
 				awful.util.spawn("bash lock.sh")
 			end,
 			{ description = "lock screen", group = "awesome" }
+		),
+
+		awful.key(
+			{ modkey, "Shift" },
+			"g",
+			function()
+				awful.util.spawn("/home/fabrb/Documents/godot/godot-4.2.2.x86_64")
+			end,
+			{ description = "run godot engine", group = "apps" }
 		)
 	)
 
