@@ -12,6 +12,7 @@ local wibox = require("wibox")
 
 -- Theme handling library
 local beautiful = require("beautiful")
+beautiful.init(gears.filesystem.get_configuration_dir() .. "theme/barbosa.lua")
 
 -- Enable hotkeys help widget for VIM and other apps
 -- when client with a matching name is opened:
@@ -27,7 +28,6 @@ require("menu")
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
 -- beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
-beautiful.init(gears.filesystem.get_configuration_dir() .. "theme/barbosa.lua")
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 awful.layout.layouts = {
@@ -223,8 +223,8 @@ awful.screen.connect_for_each_screen(
 				buttons = tasklist_buttons,
 
 				style   = {
-					shape_border_width = 1,
-					shape_border_color = '#777777',
+					shape_border_width = beautiful.border_width,
+					shape_border_color = beautiful.border_focus,
 					shape              = gears.shape.rounded_bar,
 				},
 				layout  = {
@@ -243,30 +243,33 @@ awful.screen.connect_for_each_screen(
 
 		-- Create the wibox
 		s.mywibox =
-			awful.wibar {
+            awful.wibar {
+				
 				position = "top",
 				screen = s,
 				height = 38,
-				ontop = true,
+				ontop = false,
 				stretch = false,
                 width = 800,
-                border_width = 2,
 				shape = function (cr, width, height)
 					gears.shape.rounded_rect(cr, width, height, 32)
 				end
             }
 		
         s.datecalendar = awful.widget.calendar_popup.month {
-            screen        = awful.mouse.client.screen,
-			margin = 8,
-			long_weekdays = true,
-			spacing = 10,
-            week_numbers = true,
-			start_sunday = true,
-			style_header         = {
-				shape_border_width = 1,
-				shape_border_color = '#777777',
-				shape              = gears.shape.rounded_bar,
+            screen        		= awful.mouse.client.screen,
+			margin 				= 8,
+			long_weekdays 		= true,
+			spacing 			= 10,
+            week_numbers 		= true,
+			start_sunday 		= true,
+			style_header		= {
+				border_width 	= 1,
+				border_color 	= '#777777',
+				shape              	= gears.shape.rounded_bar,
+            },
+			style_weeknumber 	= {
+				border_width 		= 0,
 			},
 		}
 		s.datecalendar:attach(mytextclock, "tc")

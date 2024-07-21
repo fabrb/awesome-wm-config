@@ -11,9 +11,9 @@ local naughty = require("naughty")
 if awesome.startup_errors then
 	naughty.notify(
 		{
-			preset = naughty.config.presets.critical,
 			title = "Oops, there were errors during startup!",
-			text = awesome.startup_errors
+            text = awesome.startup_errors,
+			position = "bottom_right"
 		}
 	)
 end
@@ -34,7 +34,8 @@ do
 				{
 					preset = naughty.config.presets.critical,
 					title = "Oops, an error happened!",
-					text = tostring(err)
+                    text = tostring(err),
+					position = "bottom_right"
 				}
 			)
 			in_error = false
