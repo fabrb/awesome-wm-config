@@ -148,7 +148,7 @@ screen.connect_signal("property::geometry", set_wallpaper)
 awful.screen.connect_for_each_screen(
 	function(s)
 		-- Each screen has its own tag table.
-		awful.tag({ "1", "2", "3" }, s, awful.layout.layouts[1])
+		awful.tag({ "1" }, s, awful.layout.layouts[1])
 
 		-- Create a promptbox for each screen
 		s.mypromptbox = awful.widget.prompt()
@@ -281,16 +281,16 @@ awful.screen.connect_for_each_screen(
 				{
 					s.mylayoutbox,
 					layout = wibox.layout.fixed.horizontal,
-					s.mytaglist,
-					s.mypromptbox
+					-- s.mytaglist,
+					s.mypromptbox,
+					mykeyboardlayout,
+					wibox.widget.systray()
 				},
 
 				s.mytasklist,
 
 				{
 					layout = wibox.layout.fixed.horizontal,
-					mykeyboardlayout,
-					wibox.widget.systray(),
 					mytextclock
 				},
 			},
@@ -315,9 +315,19 @@ awful.rules.rules = {
 	{
 		rule = {},
 		properties = {
-			border_width = beautiful.border_width,
+            tag = "1",
             border_color = beautiful.border_normal,
-			focus = awful.client.focus.filter,
+			border_width = beautiful.border_width,
+            shape = function(cr, width, height)
+                -- Verifique se 'width' e 'height' são números
+                if type(width) == "number" and type(height) == "number" then
+                    gears.shape.rounded_rect(cr, width, height, 32)
+                else
+                    -- Adicione uma mensagem de depuração para ajudar a identificar problemas
+                    print("Erro: 'width' ou 'height' não são números:", type(width), type(height))
+                end
+            end,
+            focus = awful.client.focus.filter,
 			raise = true,
 			keys = bind.clientkeys,
 			buttons = bind.clientbuttons,
@@ -410,7 +420,7 @@ client.connect_signal(
 			)
 		)
 
-		awful.titlebar(c, { size = 30 }):setup {
+		awful.titlebar(c, { size = 28 }):setup {
 			{
 				{
 					{
@@ -452,7 +462,6 @@ client.connect_signal(
 				layout = wibox.layout.align.horizontal
             },
 			
-            bg = "#000000ff",
 			shape = function(cr, width, height)
 				gears.shape.partially_rounded_rect(cr, width, height, true, true, false, false, 10)
 			end,
@@ -474,3 +483,5 @@ awful.spawn.with_shell("xrandr --output HDMI-1 --primary  --left-of eDP-1")
 -- Visual stuff
 awful.spawn.with_shell("pkill compton; pkill xcompmgr; pkill picom; picom --config ~/.config/picom/picom.conf &")
 
+-- Screen not going black
+awful.spawn.with_shell("xset s off && xset -dpms")
